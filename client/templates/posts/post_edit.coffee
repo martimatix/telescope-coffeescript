@@ -1,5 +1,11 @@
 root = exports ? this
 
+Template.postEdit.onCreated -> Session.set('postEditErrors', {})
+
+Template.postEdit.helpers
+  errorMessage: (field) -> Session.get('postEditErrors')[field]
+  errorClass: (field) -> !!Session.get('postEditErrors')[field] ? 'has-error' : ''
+
 Template.postEdit.events
   'submit form': (e) ->
     e.preventDefault()
@@ -9,6 +15,10 @@ Template.postEdit.events
     postProperties =
       url: $(e.target).find('[name=url]').val()
       title: $(e.target).find('[name=title]').val()
+
+    errorMessage = validatePost postProperties
+    if errors.title or errors.url
+      return Session.set 'postEditErrors', errors
 
     Posts.update currentPostId, {$set: postProperties}, (error) ->
       if error

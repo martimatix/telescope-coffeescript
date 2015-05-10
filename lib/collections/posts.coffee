@@ -7,9 +7,9 @@ Posts.allow
   remove: (userId, post) -> root.ownsDocument(userId, post)
 
 Posts.deny
-  update: (userId, post, fieldNames) ->
-    # may only edit the following two fields:
-    _.without(fieldNames, 'url', 'title').length > 0
+  update: (userId, post, fieldNames, modifier) ->
+    errors = validatePost(modifier.$set)
+    errors.title or errors.url
 
 validatePost = (post) ->
   errors = {}
