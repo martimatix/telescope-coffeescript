@@ -7,8 +7,8 @@ Template.postEdit.events
     currentPostId = @_id
 
     postProperties =
-      url: $(e.target).find('[name=url').val()
-      title: $(e.target).find('[name=title').val()
+      url: $(e.target).find('[name=url]').val()
+      title: $(e.target).find('[name=title]').val()
 
     root.Posts.update currentPostId, {$set: postProperties}, (error) ->
       if error
@@ -24,5 +24,6 @@ Template.postEdit.events
       currentPostId = @._id
       root.Posts.remove(currentPostId)
       Router.go('postsList')
+
 
 

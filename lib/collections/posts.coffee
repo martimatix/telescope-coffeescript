@@ -3,13 +3,13 @@ root = exports ? this
 root.Posts = new (Mongo.Collection)('posts')
 
 root.Posts.allow
-  update: (userId, post) -> ownsDocument(userId, post)
-  remove: (userId, post) -> ownsDocument(userId, post)
+  update: (userId, post) -> root.ownsDocument(userId, post)
+  remove: (userId, post) -> root.ownsDocument(userId, post)
 
 root.Posts.deny
   update: (userId, post, fieldNames) ->
     # may only edit the following two fields:
-    _.without(fieldNames, 'url', 'title').lenght > 0
+    _.without(fieldNames, 'url', 'title').length > 0
 
 Meteor.methods postInsert: (postAttributes) ->
   check Meteor.userId(), String
@@ -17,7 +17,7 @@ Meteor.methods postInsert: (postAttributes) ->
     title: String
     url: String
 
-  postWithSameLink = Posts.findOne url: postAttributes.url
+  postWithSameLink = root.Posts.findOne url: postAttributes.url
   if postWithSameLink
     return {
       postExists: true

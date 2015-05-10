@@ -1,3 +1,5 @@
+root = exports ? this
+
 # check that the userId specified owns the document
-ownsDocument = (userId, doc) ->
-  doc && (doc.userId == userId)
+root.ownsDocument = (userId, doc) ->
+  doc and doc.userId == userId

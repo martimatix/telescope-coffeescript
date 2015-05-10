@@ -14,7 +14,6 @@ Router.route '/posts/:_id/edit',
   name: 'postEdit'
   data: -> Posts.findOne(@params._id)
 
-
 Router.route '/submit', name: 'postSubmit'
 
 requireLogin = ->
