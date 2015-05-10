@@ -10,10 +10,10 @@ Template.postEdit.events
       url: $(e.target).find('[name=url]').val()
       title: $(e.target).find('[name=title]').val()
 
-    root.Posts.update currentPostId, {$set: postProperties}, (error) ->
+    Posts.update currentPostId, {$set: postProperties}, (error) ->
       if error
         # display the error to the user
-        alert error.reason
+        throwError error.reason
       else
         Router.go 'postPage', {_id: currentPostId}
     
@@ -22,7 +22,7 @@ Template.postEdit.events
 
     if confirm("Delete this post?")
       currentPostId = @._id
-      root.Posts.remove(currentPostId)
+      Posts.remove(currentPostId)
       Router.go('postsList')
 
 
