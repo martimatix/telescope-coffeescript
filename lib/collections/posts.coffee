@@ -2,32 +2,46 @@ root = exports ? this
 
 root.Posts = new (Mongo.Collection)('posts')
 
-root.Posts.allow
+Posts.allow
   update: (userId, post) -> root.ownsDocument(userId, post)
   remove: (userId, post) -> root.ownsDocument(userId, post)
 
-root.Posts.deny
+Posts.deny
   update: (userId, post, fieldNames) ->
     # may only edit the following two fields:
     _.without(fieldNames, 'url', 'title').length > 0
 
-Meteor.methods postInsert: (postAttributes) ->
-  check Meteor.userId(), String
-  check postAttributes,
-    title: String
-    url: String
+validatePost = (post) ->
+  errors = {}
+  if !post.title
+    errors.title = "Please fill in a headline"
+  if !post.url
+    errors.url = "Please fill in a URL"
+  return errors
+  
 
-  postWithSameLink = root.Posts.findOne url: postAttributes.url
-  if postWithSameLink
-    return {
-      postExists: true
-      _id: postWithSameLink._id
-    }
-  user = Meteor.user()
-  post = _.extend(postAttributes,
-    userId: user._id
-    author: user.username
-    submitted: new Date)
-  postId = root.Posts.insert(post)
-  { _id: postId }
+Meteor.methods
+  postInsert: (postAttributes) ->
+    check Meteor.userId(), String
+    check postAttributes,
+      title: String
+      url: String
+
+    errors = validatePost postAttributes
+    if errors.title or errors.url
+      throw new Meteor.Error 'invalid-post', "You must set a title and URL for your post"
+
+    postWithSameLink = root.Posts.findOne url: postAttributes.url
+    if postWithSameLink
+      return {
+        postExists: true
+        _id: postWithSameLink._id
+      }
+    user = Meteor.user()
+    post = _.extend(postAttributes,
+      userId: user._id
+      author: user.username
+      submitted: new Date)
+    postId = root.Posts.insert(post)
+    { _id: postId }
     
