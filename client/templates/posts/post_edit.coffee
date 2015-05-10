@@ -3,8 +3,10 @@ root = exports ? this
 Template.postEdit.onCreated -> Session.set('postEditErrors', {})
 
 Template.postEdit.helpers
-  errorMessage: (field) -> Session.get('postEditErrors')[field]
-  errorClass: (field) -> !!Session.get('postEditErrors')[field] ? 'has-error' : ''
+  errorMessage: (field) ->
+    Session.get('postEditErrors')[field]
+  errorClass: (field) ->
+    if ! !Session.get('postSubmitErrors')[field] then 'has-error' else ''
 
 Template.postEdit.events
   'submit form': (e) ->

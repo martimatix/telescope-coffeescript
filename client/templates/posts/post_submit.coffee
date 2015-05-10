@@ -2,8 +2,10 @@ Template.postSubmit.onCreated ->
   Session.set('postSubmitErrors', {})
 
 Template.postSubmit.helpers
-  errorMessage: (field) -> Session.get('postSubmitErrors')[field]
-  errorClass: (field) -> !!Session.get('postSubmitErrors')[field] ? 'has-error' : ''
+  errorMessage: (field) ->
+    Session.get('postSubmitErrors')[field]
+  errorClass: (field) ->
+    if ! !Session.get('postSubmitErrors')[field] then 'has-error' else ''
 
 Template.postSubmit.events
   'submit form': (e) ->
