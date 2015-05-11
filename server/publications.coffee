@@ -1,4 +1,5 @@
-root = exports ? this
-
 Meteor.publish 'posts', ->
-  root.Posts.find()
+  Posts.find()
+
+Meteor.publish 'comments', ->
+  Comments.find()
