@@ -6,7 +6,7 @@ Notifications.allow
   update: (userId, doc, fieldNames) ->
     ownsDocument(userId, doc) and fieldNames[0] == 'read'
 
-createCommentNotification = (comment) ->
+root.createCommentNotification = (comment) ->
   post = Posts.findOne(comment.postId)
   if comment.Userid isnt post.userId
     Notifications.insert

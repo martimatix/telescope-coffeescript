@@ -11,7 +11,7 @@ Posts.deny
     errors = validatePost(modifier.$set)
     errors.title or errors.url
 
-validatePost = (post) ->
+root.validatePost = (post) ->
   errors = {}
   if !post.title
     errors.title = "Please fill in a headline"
@@ -41,8 +41,8 @@ Meteor.methods
     post = _.extend(postAttributes,
       userId: user._id
       author: user.username
-      submitted: new Date)
-      commentsCount: 0
+      submitted: new Date
+      commentsCount: 0)
     postId = root.Posts.insert(post)
     { _id: postId }
     

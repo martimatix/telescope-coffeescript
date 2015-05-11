@@ -4,7 +4,7 @@ Template.notifications.helpers
       userId: Meteor.userId()
       read: false
   notificationCount: ->
-    Notificatios.find(
+    Notifications.find(
       userId: Meteor.userId()
       read: false).count()
 
@@ -13,5 +13,6 @@ Template.notificationItem.helpers
     Router.routes.postPage.path( _id: @postId )
 
 Template.notificationItem.events
-  'click a': -> Notificatios.update( @_id, {$set: {read: true}})
-  return
+  'click a': ->
+    Notifications.update( @_id, {$set: {read: true}})
+    return

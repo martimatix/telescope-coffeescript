@@ -26,5 +26,5 @@ Meteor.methods commentInsert: (commentAttributes) ->
   # create the comment, save the id
   comment._id = Comments.insert comment
   # now create a notification, informing the user that there's been a comment
-  createCommentNotification(comment)
+  root.createCommentNotification(comment)
   return comment._id
