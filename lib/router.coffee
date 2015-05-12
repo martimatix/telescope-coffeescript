@@ -6,17 +6,21 @@ Router.configure
   notFoundTemplate: 'notFound'
   waitOn: -> [Meteor.subscribe('notifications')]
 
-root.PostsListController = RouteController.extend
+root.PostsListController = RouteController.extend(
   template: 'postsList'
   increment: 5
   postsLimit: ->
-    parseInt(@params.postsLimit) || @increment
+    parseInt(@params.postsLimit) or @increment
   findOptions: ->
-    { sort: { submitted: -1 }, limit: @postsLimit() }
+    {
+      sort: submitted: -1
+      limit: @postsLimit()
+    }
   waitOn: ->
     Meteor.subscribe 'posts', @findOptions()
   data: ->
     { posts: Posts.find({}, @findOptions()) }
+)
 
 Router.route '/posts/:_id',
   name: 'postPage'
