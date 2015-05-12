@@ -1,8 +1,22 @@
+root = exports ? this
+
 Router.configure
   layoutTemplate: 'layout'
   loadingTemplate: 'loading'
   notFoundTemplate: 'notFound'
   waitOn: -> [Meteor.subscribe('notifications')]
+
+root.PostsListController = RouteController.extend
+  template: 'postsList'
+  increment: 5
+  postsLimit: ->
+    parseInt(@params.postsLimit) || @increment
+  findOptions: ->
+    { sort: { submitted: -1 }, limit: @postsLimit() }
+  waitOn: ->
+    Meteor.subscribe 'posts', @findOptions()
+  data: ->
+    { posts: Posts.find({}, @findOptions()) }
 
 Router.route '/posts/:_id',
   name: 'postPage'
@@ -18,12 +32,6 @@ Router.route '/submit', name: 'postSubmit'
 
 Router.route '/:postsLimit?',
   name: 'postsList'
-  waitOn: ->
-    limit = parseInt(@params.postsLimit) || 5
-    Meteor.subscribe('posts', {sort: {submitted: -1}, limit: limit})
-  data: ->
-    limit = parseInt(@params.postsLimit) || 5
-    posts: Posts.find({}, {sort: {submitted: -1}, limit: limit})
 
 requireLogin = ->
   if !Meteor.user()
