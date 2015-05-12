@@ -19,7 +19,10 @@ root.PostsListController = RouteController.extend(
   subscriptions: ->
     @postsSub = Meteor.subscribe('posts', @findOptions())
   waitOn: ->
-    Meteor.subscribe 'posts', @findOptions()
+    [
+      Meteor.subscribe('singlePost', @params._id),
+      Meteor.subscribe('comments', @params._id)
+    ]
   posts: ->
     Posts.find({}, @findOptions())
   data: ->
@@ -41,6 +44,7 @@ Router.route '/posts/:_id',
 
 Router.route '/posts/:_id/edit',
   name: 'postEdit'
+  waitOn: -> Meteor.subscribe('singlePost', @params._id)
   data: -> Posts.findOne(@params._id)
 
 Router.route '/submit', name: 'postSubmit'
