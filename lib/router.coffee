@@ -16,6 +16,8 @@ root.PostsListController = RouteController.extend(
       sort: submitted: -1
       limit: @postsLimit()
     }
+  subscriptions: ->
+    @postsSub = Meteor.subscribe('posts', @findOptions())
   waitOn: ->
     Meteor.subscribe 'posts', @findOptions()
   posts: ->
@@ -26,6 +28,7 @@ root.PostsListController = RouteController.extend(
 
     {
       posts: @posts()
+      ready: @postsSub.ready
       nextPath: if hasMore then nextPath else null
     }
 )
