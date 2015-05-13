@@ -18,17 +18,12 @@ root.PostsListController = RouteController.extend(
     }
   subscriptions: ->
     @postsSub = Meteor.subscribe('posts', @findOptions())
-  waitOn: ->
-    [
-      Meteor.subscribe('singlePost', @params._id),
-      Meteor.subscribe('comments', @params._id)
-    ]
+    return
   posts: ->
-    Posts.find({}, @findOptions())
+    Posts.find {}, @findOptions()
   data: ->
     hasMore = @posts().count() == @postsLimit()
-    nextPath = @route.path({ postsLimit: @postsLimit() + @increment })
-
+    nextPath = @route.path(postsLimit: @postsLimit() + @increment)
     {
       posts: @posts()
       ready: @postsSub.ready
