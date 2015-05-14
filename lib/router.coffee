@@ -13,7 +13,7 @@ root.PostsListController = RouteController.extend(
     parseInt(@params.postsLimit) or @increment
   findOptions: ->
     {
-      sort: submitted: -1
+      sort: @sort
       limit: @postsLimit()
     }
   subscriptions: ->
@@ -27,9 +27,25 @@ root.PostsListController = RouteController.extend(
     {
       posts: @posts()
       ready: @postsSub.ready
-      nextPath: if hasMore then nextPath else null
+      nextPath: if hasMore then @nextPath else null
     }
 )
+root.NewPostsController = PostsListController.extend
+  sort: { submitted: -1, _id: -1 }
+  nextPath: ->
+    Router.routes.newPosts.path { postsLimit: @postsLimit() + @increment }
+
+root.BestPostsController = PostsListController.extend
+  sort: { votes: -1, submitted: -1, _id: -1 }
+  nextPath: ->
+    Router.routes.bestPosts.path { postsLimit: @postsLimit() + @increment }
+
+Router.route '/',
+  name: 'home'
+  controller: NewPostsController
+
+Router.route '/new/:postsLimit?', name: 'newPosts'
+Router.route '/best/:postsLimit?', name: 'bestPosts'
 
 Router.route '/posts/:_id',
   name: 'postPage'
@@ -43,9 +59,6 @@ Router.route '/posts/:_id/edit',
   data: -> Posts.findOne(@params._id)
 
 Router.route '/submit', name: 'postSubmit'
-
-Router.route '/:postsLimit?',
-  name: 'postsList'
 
 requireLogin = ->
   if !Meteor.user()
