@@ -52,7 +52,7 @@ Meteor.methods
     check(postId, String)
     post = Posts.findOne(postId)
 
-    affected = Posts.update
+    affected = Posts.update(
       {
         _id: postId
         upvoters: {$ne: @userId}
@@ -60,7 +60,7 @@ Meteor.methods
       {
         $addToSet: {upvoters: @userId}
         $inc: {votes: 1}
-      }
+      })
     if not affected
       throw new Meteor.Error('invalid', "You weren't able to upvote that post")
     return
