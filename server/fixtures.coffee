@@ -12,7 +12,9 @@ if Posts.find().count() == 0
     author: sacha.profile.name
     url: 'http://sachagreif.com/introducing-telescope/'
     submitted: new Date(now - (7 * 3600 * 1000))
-    commentsCount: 2)
+    commentsCount: 2
+    upvoters: []
+    votes: 0)
   Comments.insert
     postId: telescopeId
     userId: tom._id
@@ -32,6 +34,8 @@ if Posts.find().count() == 0
     url: 'http://meteor.com'
     submitted: new Date(now - (10 * 3600 * 1000))
     commentsCount: 0
+    upvoters: []
+    votes: 0
   Posts.insert
     title: 'The Meteor Book'
     userId: tom._id
@@ -39,6 +43,9 @@ if Posts.find().count() == 0
     url: 'http://themeteorbook.com'
     submitted: new Date(now - (12 * 3600 * 1000))
     commentsCount: 0
+    upvoters: []
+    votes: 0
+
   i = 0
   while i < 10
     Posts.insert
@@ -48,4 +55,6 @@ if Posts.find().count() == 0
       url: 'http://google.com/?q=test-' + i
       submitted: new Date(now - (i * 3600 * 1000))
       commentsCount: 0
+      upvoters: []
+      votes: 0
     i++
